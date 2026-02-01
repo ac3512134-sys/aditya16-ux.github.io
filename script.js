@@ -1,4 +1,24 @@
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+function addTask() {
+  const input = document.getElementById("taskInput");
+  const time = parseInt(document.getElementById("timeInput").value);
+
+  if (input.value.trim() === "") return;
+
+  tasks.push({
+    text: input.value,
+    duration: time * 60,     // total seconds
+    remaining: time * 60,    // countdown seconds
+    running: false,
+    onBreak: false,
+    done: false
+  });
+
+  input.value = "";
+  renderTasks();
+}
+
+let activeIndex = null;
+let interval;
 
 function renderTasks() {
   const list = document.getElementById("taskList");
@@ -8,17 +28,38 @@ function renderTasks() {
     const li = document.createElement("li");
     li.className = "task" + (task.done ? " completed" : "");
 
-    li.innerHTML = `
-  <input type="checkbox" ${task.done ? "checked" : ""}
-    onchange="toggleTask(${index})">
-  <span>${task.text}</span>
-  <small>${task.duration} min</small>
-  <button onclick="removeTask(${index})">❌</button>
-`;
+    const minutes = Math.floor(task.remaining / 60);
+    const seconds = task.remaining % 60;
+    const timeDisplay = `${minutes}:${seconds.toString().padStart(2, "0")}`;
 
+    li.innerHTML = `
+      <div>
+        <strong>${task.text}</strong>
+        <div style="font-size:14px; color:#9ca3af;">
+          ${task.onBreak ? "☕ Break" : "⏱ Focus"} — ${timeDisplay}
+        </div>
+      </div>
+
+      <div style="display:flex; gap:8px;">
+        ${!task.done ? `
+          <button onclick="startTask(${index})">▶</button>
+          <button onclick="pauseTask()">⏸</button>
+          <button onclick="resetTask(${index})">🔁</button>
+        ` : ""}
+
+        ${task.done && !task.onBreak ? `
+          <button onclick="startBreak(${index})">☕ Break</button>
+        ` : ""}
+
+        <button onclick="removeTask(${index})">❌</button>
+      </div>
+    `;
 
     list.appendChild(li);
   });
+
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
 
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
