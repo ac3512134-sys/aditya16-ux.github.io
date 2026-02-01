@@ -1,3 +1,5 @@
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
 function addTask() {
   const input = document.getElementById("taskInput");
   const time = parseInt(document.getElementById("timeInput").value);
@@ -58,9 +60,6 @@ function renderTasks() {
     list.appendChild(li);
   });
 
- localStorage.setItem("tasks", JSON.stringify(tasks));
-}
-
 
  localStorage.setItem("tasks", JSON.stringify(tasks));
 updateTotalTime();
@@ -79,52 +78,6 @@ function removeTask(index) {
 }
 
 renderTasks();
-let timer;
-let timeLeft = 25 * 60; // 25 minutes
-let running = false;
-
-function updateTimerDisplay() {
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
-
-  document.getElementById("timerDisplay").textContent =
-    `${minutes}:${seconds.toString().padStart(2, "0")}`;
-}
-
-function startTimer() {
-  if (running) return;
-  running = true;
-
-  timer = setInterval(() => {
-    if (timeLeft > 0) {
-      timeLeft--;
-      updateTimerDisplay();
-    } else {
-      clearInterval(timer);
-      running = false;
-      alert("Successful people are not gifted; they just work hard, then succeed on purpose.");
-    }
-  }, 1000);
-}
-
-function pauseTimer() {
-  clearInterval(timer);
-  running = false;
-}
-
-function resetTimer() {
-  clearInterval(timer);
-  running = false;
-  timeLeft = 25 * 60;
-  updateTimerDisplay();
-}
-
-updateTimerDisplay();
-function startTask(index) {
-  if (activeIndex !== null && activeIndex !== index) {
-    alert("Finish the current task first.");
-    return;
-  }
 
   activeIndex = index;
 
