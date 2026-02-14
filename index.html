@@ -1,55 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Aditya | Study Tracker</title>
+  <title>Aditya Focus</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <div class="container">
-    <nav class="nav">
-  <a href="index.html" class="active">🏠 Home</a>
+
+<nav>
+  <a href="index.html">🏠 Focus</a>
   <a href="about.html">👤 About</a>
 </nav>
 
-    <h1>👋 Hi, I'm <span>Aditya</span></h1>
-    <p class="subtitle">
-      Class 12 student | Improving daily | Focused on real-life skills
-    </p>
+<h1>🔥 Focus Mode</h1>
 
-    <div class="pomodoro">
-  <h2>⏱ Pomodoro Timer</h2>
+<div class="card">
 
-  <div id="timerDisplay">25:00</div>
+  <input type="text" id="taskInput" placeholder="Enter task">
 
-  <div class="timer-buttons">
-    <button onclick="startTimer()">▶ Start</button>
-    <button onclick="pauseTimer()">⏸ Pause</button>
-    <button onclick="resetTimer()">🔁 Reset</button>
-  </div>
+  <select id="timeInput">
+    <option value="25">25 min</option>
+    <option value="40">40 min</option>
+    <option value="60">60 min</option>
+  </select>
+
+  <button onclick="addTask()">Add</button>
+
+  <ul id="taskList"></ul>
+
+  <h3 id="totalTime">Total Time: 0 min</h3>
+
 </div>
 
-      <h2>📚 Daily Study Tasks</h2>
+<script src="script.js"></script>
 
-      <div class="task-input">
-        <input type="text" id="taskInput" placeholder="Enter your task">
-
-<select id="timeInput">
-  <option value="25">25 min</option>
-  <option value="40">40 min</option>
-  <option value="60">60 min</option>
-</select>
-
-<button onclick="addTask()">Add</button>
-
-      </div>
-
-      <ul id="taskList" class="tasks"></ul>
-      <div id="totalTime" class="total-time">
-        Total Focus Time: 0 min
-      </div>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
 </body>
-
+</html>
