@@ -8,10 +8,8 @@ function addTask() {
 
   tasks.push({
     text: input.value,
-    duration: time * 60,     // total seconds
-    remaining: time * 60,    // countdown seconds
-    running: false,
-    onBreak: false,
+    duration: time * 60,
+    remaining: time * 60,
     done: false
   });
 
@@ -19,57 +17,29 @@ function addTask() {
   renderTasks();
 }
 
-let activeIndex = null;
-let interval;
-
 function renderTasks() {
   const list = document.getElementById("taskList");
   list.innerHTML = "";
 
   tasks.forEach((task, index) => {
     const li = document.createElement("li");
-    li.className = "task" + (task.done ? " completed" : "");
 
     const minutes = Math.floor(task.remaining / 60);
     const seconds = task.remaining % 60;
-    const timeDisplay = `${minutes}:${seconds.toString().padStart(2, "0")}`;
 
     li.innerHTML = `
-      <div>
-        <strong>${task.text}</strong>
-        <div style="font-size:14px; color:#9ca3af;">
-          ${task.onBreak ? "☕ Break" : "⏱ Focus"} — ${timeDisplay}
-        </div>
-      </div>
-
-      <div style="display:flex; gap:8px;">
-        ${!task.done ? `
-          <button onclick="startTask(${index})">▶</button>
-          <button onclick="pauseTask()">⏸</button>
-          <button onclick="resetTask(${index})">🔁</button>
-        ` : ""}
-
-        ${task.done && !task.onBreak ? `
-          <button onclick="startBreak(${index})">☕ Break</button>
-        ` : ""}
-
-        <button onclick="removeTask(${index})">❌</button>
-      </div>
+      <span>${task.text} (${minutes}:${seconds
+        .toString()
+        .padStart(2, "0")})</span>
+      <button onclick="startTask(${index})">▶</button>
+      <button onclick="removeTask(${index})">❌</button>
     `;
 
     list.appendChild(li);
   });
 
-
- localStorage.setItem("tasks", JSON.stringify(tasks));
-updateTotalTime();
-}
-
-
-
-function toggleTask(index) {
-  tasks[index].done = !tasks[index].done;
-  renderTasks();
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  updateTotalTime();
 }
 
 function removeTask(index) {
@@ -77,81 +47,34 @@ function removeTask(index) {
   renderTasks();
 }
 
-renderTasks();
+let currentInterval = null;
 
-  activeIndex = index;
+function startTask(index) {
+  if (currentInterval) clearInterval(currentInterval);
 
-  // 🔹 Sync timer with task time
-  if (tasks[index].remaining <= 0 || tasks[index].remaining > tasks[index].duration) {
-    tasks[index].remaining = tasks[index].duration;
-  }
-
-  clearInterval(interval);
-  interval = setInterval(() => {
+  currentInterval = setInterval(() => {
     if (tasks[index].remaining > 0) {
       tasks[index].remaining--;
       renderTasks();
     } else {
-      clearInterval(interval);
-      tasks[index].done = true;
-      activeIndex = null;
-
+      clearInterval(currentInterval);
       alert(
-        "Successful people are not gifted; they just work hard, then succeed on purpose."
+        "Successful people are not gifted; they just work hard, then succeed on purpose"
       );
-
+      tasks[index].done = true;
       renderTasks();
     }
   }, 1000);
 }
 
-
-function pauseTask() {
-  clearInterval(interval);
-  activeIndex = null;
-}
-
-function resetTask(index) {
-  clearInterval(interval);
-  tasks[index].remaining = tasks[index].duration;
-  tasks[index].running = false;
-  activeIndex = null;
-  renderTasks();
-}
-
-function startBreak(index) {
-  clearInterval(interval);
-  activeIndex = index;
-
-  tasks[index].onBreak = true;
-  tasks[index].remaining = 8 * 60;
-
-  interval = setInterval(() => {
-    if (tasks[index].remaining > 0) {
-      tasks[index].remaining--;
-      renderTasks();
-    } else {
-      clearInterval(interval);
-      tasks[index].onBreak = false;
-      tasks[index].remaining = tasks[index].duration;
-      activeIndex = null;
-
-      alert("Break over. Back to work.");
-      renderTasks();
-    }
-  }, 1000);
-}
 function updateTotalTime() {
-  const totalSeconds = tasks
-    .filter(task => !task.done)
-    .reduce((sum, task) => sum + task.duration, 0);
+  const total = tasks.reduce((sum, task) => sum + task.remaining, 0);
 
-  const totalMinutes = Math.floor(totalSeconds / 60);
-  const hours = Math.floor(totalMinutes / 60);
-  const minutes = totalMinutes % 60;
+  const minutes = Math.floor(total / 60);
 
-  document.getElementById("totalTime").textContent =
-    hours > 0
-      ? `Total Focus Time: ${hours}h ${minutes}m`
-      : `Total Focus Time: ${totalMinutes} min`;
+  document.getElementById(
+    "totalTime"
+  ).innerText = "Total Focus Time: " + minutes + " min";
 }
+
+renderTasks();
