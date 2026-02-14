@@ -2,54 +2,32 @@
 <html>
 <head>
   <title>Aditya | Study Tracker</title>
-  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <div class="container">
-    <nav class="nav">
-  <a href="index.html" class="active">🏠 Home</a>
-  <a href="about.html">👤 About</a>
-</nav>
 
-    <h1>👋 Hi, I'm <span>Aditya</span></h1>
-    <p class="subtitle">
-      Class 12 student | Improving daily | Focused on real-life skills
-    </p>
+  <h1>👋 Hi, I'm Aditya</h1>
+  <p>Class 12 student | Improving daily</p>
 
-    <div class="pomodoro">
-  <h2>⏱ Pomodoro Timer</h2>
+  <hr>
 
-  <div id="timerDisplay">25:00</div>
+  <h2>📚 Daily Study Tasks</h2>
 
-  <div class="timer-buttons">
-    <button onclick="startTimer()">▶ Start</button>
-    <button onclick="pauseTimer()">⏸ Pause</button>
-    <button onclick="resetTimer()">🔁 Reset</button>
-  </div>
-</div>
+  <input type="text" id="taskInput" placeholder="Enter task">
 
-      <h2>📚 Daily Study Tasks</h2>
+  <select id="timeInput">
+    <option value="25">25 min</option>
+    <option value="40">40 min</option>
+    <option value="60">60 min</option>
+  </select>
 
-      <div class="task-input">
-        <input type="text" id="taskInput" placeholder="Enter your task">
+  <button onclick="addTask()">Add Task</button>
 
-<select id="timeInput">
-  <option value="25">25 min</option>
-  <option value="40">40 min</option>
-  <option value="60">60 min</option>
-</select>
+  <ul id="taskList"></ul>
 
-<button onclick="addTask()">Add</button>
-
-      </div>
-
-      <ul id="taskList" class="tasks"></ul>
-      <div id="totalTime" class="total-time">
-        Total Focus Time: 0 min
-      </div>
-    </div>
-  </div>
+  <h3 id="totalTime">Total Focus Time: 0 min</h3>
 
   <script src="script.js"></script>
-</body>
 
+</body>
+</html>
