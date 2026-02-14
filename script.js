@@ -1,5 +1,6 @@
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
+// Add Task
 function addTask() {
   const input = document.getElementById("taskInput");
   const time = parseInt(document.getElementById("timeInput").value);
@@ -8,73 +9,56 @@ function addTask() {
 
   tasks.push({
     text: input.value,
-    duration: time * 60,
-    remaining: time * 60,
+    duration: time,
     done: false
   });
 
   input.value = "";
+  saveAndRender();
+}
+
+// Toggle complete
+function toggleTask(index) {
+  tasks[index].done = !tasks[index].done;
+  saveAndRender();
+}
+
+// Remove task
+function removeTask(index) {
+  tasks.splice(index, 1);
+  saveAndRender();
+}
+
+// Save + render
+function saveAndRender() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
   renderTasks();
 }
 
+// Render tasks
 function renderTasks() {
   const list = document.getElementById("taskList");
   list.innerHTML = "";
 
+  let total = 0;
+
   tasks.forEach((task, index) => {
+    if (!task.done) total += task.duration;
+
     const li = document.createElement("li");
 
-    const minutes = Math.floor(task.remaining / 60);
-    const seconds = task.remaining % 60;
-
     li.innerHTML = `
-      <span>${task.text} (${minutes}:${seconds
-        .toString()
-        .padStart(2, "0")})</span>
-      <button onclick="startTask(${index})">▶</button>
+      <input type="checkbox" ${task.done ? "checked" : ""} onclick="toggleTask(${index})">
+      ${task.text} (${task.duration} min)
       <button onclick="removeTask(${index})">❌</button>
     `;
 
     list.appendChild(li);
   });
 
-  localStorage.setItem("tasks", JSON.stringify(tasks));
-  updateTotalTime();
+  document.getElementById("totalTime").innerText =
+    "Total Focus Time: " + total + " min";
 }
 
-function removeTask(index) {
-  tasks.splice(index, 1);
-  renderTasks();
-}
-
-let currentInterval = null;
-
-function startTask(index) {
-  if (currentInterval) clearInterval(currentInterval);
-
-  currentInterval = setInterval(() => {
-    if (tasks[index].remaining > 0) {
-      tasks[index].remaining--;
-      renderTasks();
-    } else {
-      clearInterval(currentInterval);
-      alert(
-        "Successful people are not gifted; they just work hard, then succeed on purpose"
-      );
-      tasks[index].done = true;
-      renderTasks();
-    }
-  }, 1000);
-}
-
-function updateTotalTime() {
-  const total = tasks.reduce((sum, task) => sum + task.remaining, 0);
-
-  const minutes = Math.floor(total / 60);
-
-  document.getElementById(
-    "totalTime"
-  ).innerText = "Total Focus Time: " + minutes + " min";
-}
-
+// Run on load
 renderTasks();
