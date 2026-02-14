@@ -1,37 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Aditya Focus</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aditya | Study Tracker</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<nav>
-  <a href="index.html">🏠 Focus</a>
-  <a href="about.html">👤 About</a>
-</nav>
+<div class="container">
 
-<h1>🔥 Focus Mode</h1>
+    <!-- NAVBAR -->
+    <nav class="nav">
+        <a href="index.html" class="active">🏠 Home</a>
+        <a href="about.html">👤 About</a>
+    </nav>
 
-<div class="card">
+    <!-- TITLE -->
+    <h1>👋 Hi, I'm <span>Aditya</span></h1>
+    <p class="subtitle">
+        Class 12 student | Improving daily | Focused on real-life skills
+    </p>
 
-  <input type="text" id="taskInput" placeholder="Enter task">
+    <!-- TASK CARD -->
+    <div class="card">
 
-  <select id="timeInput">
-    <option value="25">25 min</option>
-    <option value="40">40 min</option>
-    <option value="60">60 min</option>
-  </select>
+        <h2>📚 Daily Study Tasks</h2>
 
-  <button onclick="addTask()">Add</button>
+        <!-- INPUT -->
+        <div class="task-input">
+            <input type="text" id="taskInput" placeholder="Enter your task">
 
-  <ul id="taskList"></ul>
+            <select id="timeInput">
+                <option value="25">25 min</option>
+                <option value="40">40 min</option>
+                <option value="60">60 min</option>
+            </select>
 
-  <h3 id="totalTime">Total Time: 0 min</h3>
+            <button onclick="addTask()">Add</button>
+        </div>
+
+        <!-- TASK LIST -->
+        <ul id="taskList"></ul>
+
+        <!-- TOTAL TIME -->
+        <h3 id="totalTime">Total Focus Time: 0 min</h3>
+
+    </div>
 
 </div>
 
+<!-- SCRIPT -->
 <script src="script.js"></script>
 
 </body>
